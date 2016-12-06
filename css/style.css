@@ -1,0 +1,53 @@
+#color{
+     width: 800px;
+     height: 600px;
+     padding: 10px;
+     border: 5px solid gray;
+     margin: 0 auto;
+ }
+ #intro{
+    width: 800px;
+    font-size: 200%;
+    margin: 0 auto;
+    text-align: center;
+ }
+ #title{
+    font-weight: bold;
+ }
+ #instruction{
+    text-align: center;
+    font-size: 150%;
+ }
+ #description , #footer{
+     font-size: 250%;
+     margin: 0 auto;
+ }
+ p{
+     font-size:150%; 
+     margin: 0 auto;
+ }
+#values{
+    font-weight: bold;
+    text-align: center;
+}
+#noAccelButton{
+    width: 250px;
+    
+}
+#buttonDiv{
+    margin: 0 auto;
+    text-align:center;
+    margin-bottom: 5px;
+}
+.topic{
+    border-bottom-style: solid;
+    border-width: 2px;
+    font-size: 150%;
+ }
+.definition{
+    font-size: 115%;
+ }
+footer{
+    font-size: 250%;
+    margin: 0 auto;
+ }

@@ -1,0 +1,175 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" type="text/css" href="css/style.css" title="style-sheet"/>
+
+   <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+   <head>
+      <title>Accelerometer Demo</title>
+      <meta charset="utf-8">
+      
+   </head>
+   <body>
+      <section id = "intro">
+          <div id = "title">Tilting your device along x,y,z axis changes the hue, saturation, and luminosity value of the box below.</div>
+          <div>You gotta see it to believe it!</div>
+                </section>
+
+          <ul>
+            <li><a href="/1.png">image 1</a></li>
+            <li><a href="/2.png">image 2</a></li>
+            <li><a href="/3.png">image 3</a></li>
+            <li><a href="/4.png">image 4</a></li>
+           </ul>
+          <div id = "instruction">Use on a mobile device or laptop! If you are unsure if your device has an accelerometer, check your browser console for any output.
+           If None, then click on button for a random HSL!</div>
+        <section id = "details">  
+        <br/>    
+     
+      </section>
+
+      <section id = "values">
+      <div id = "description">HSL Values: Rounded up to nearest whole number</div>
+      <div id = "hue">Hue Value (0,360): 
+         <span id = "hueValue"></span>
+      </div>
+      <div id = "saturation">Saturation Value (0,100):
+         <span id = "saturationValue"></span>
+      </div>
+      <div id = "luminosity">Luminosity Value (0,100):
+         <span id = "luminosityValue"></span>
+      </div>
+      <div id = "beta">Beta Value (-180,180): 
+         <span id = "betaValue"></span>
+      </div>
+      <div id = "gamma">Gamma Value (-90,90):
+         <span id = "gammaValue"></span>
+      </div>
+      <div id = "alpha">Alpha Value (0,360):
+         <span id = "alphaValue"></span>
+      </div>
+      </section>
+
+      <section id ="presentation">
+      <div id = "buttonDiv"><button id = "noAccelButton" onclick="return false;">For users with no Accelerometer :(</button> 
+      </div>
+      <div id = "color"></div>
+      </section>
+
+       <p>
+         <div class = "topic">Hue </div>
+         
+         <div class = "definition">Hue is a degree on the color wheel from 0 to 360. 0 is red, 120 is green, 240 is blue.</div>
+         <div class = "topic">Saturation</div>
+         <div class = "definition">
+         Saturation is a percentage value; 0% means a shade of gray and 100% is the full color.
+         </div>
+         <div class = "topic">Lightness</div>
+                  <div class = "definition">
+
+         Lightness is also a percentage; 0% is black, 100% is white.
+</div>         
+      </p>
+
+      <script>
+         var box = document.getElementById("color");
+         box.style.backgroundColor = "black";
+         
+         var hue = document.getElementById("hueValue");
+         var sat = document.getElementById("saturationValue");
+         var lum = document.getElementById("luminosityValue");
+         
+         var beta = document.getElementById("betaValue");
+         var gamma = document.getElementById("gammaValue");
+         var alpha = document.getElementById("alphaValue");
+         
+         window.addEventListener("deviceorientation", function(event){
+             //rotate along this axis
+             //beta is x axis (-180,180)   
+             //gamma is y axis (-90,90)
+             //alpha is the z axis (0,360)
+         
+             var x = event.beta;
+             var y = event.gamma;
+             var z = event.alpha;
+         
+             console.log("x: beta: " + event.beta)
+             console.log("y: gamma: " + event.gamma)
+             console.log("z: alpha: " + event.alpha)
+         
+             var roundedX = Math.round(x);
+             var roundedY = Math.round(y);
+             var roundedZ = Math.round(z);
+             beta.innerText = roundedX;
+             gamma.innerText = roundedY;
+             alpha.innerText = roundedZ;
+         
+         
+         
+             //http://stackoverflow.com/questions/11257015/how-to-give-hsl-color-value-to-an-svg-element
+             var hslColor = "hsl("+[roundedX,roundedY,roundedZ].map(function(cord, i){ 
+                if(i==0){ //providing hue (-180,180) given beta
+                    var hueVal = cord + 180;
+                    hue.innerText = hueVal;
+                    return hueVal;
+                }
+                else if (i==1){ //provide saturation given gamma
+                    //mapping -90,90 to 0,100
+                    //18 values of gamma map to 1 value of saturation
+                    var satVal = Math.floor((cord+90)/1.8)+ "%"
+                    sat.innerText = satVal;
+                    return satVal;
+                }
+                else if (i==2){//provide luminosity given alpha
+                    //mapping 0,360  to 0,100
+                    //36 values of gamma map to 1 value of saturation
+                    var lumen = Math.floor(cord/3.6);
+         
+                    if(lumen == 0){ // some laptops do not have a alpha value
+                        lumen = Math.floor((roundedY+90)/1.8);
+                        lum.innerText = "Some laptops do not have alpha, default is the same as saturation: " +  lumen
+                        return lumen+ "%";
+                    }
+                    else{
+                        lum.innerText = lumen;
+                        return lumen + "%";
+                    }
+         
+                }
+                alert("error if I reached here");
+               return 0 + "%"; 
+         
+                }).join(',')+")";
+         
+             console.log("hsl val : "  + hslColor);
+             box.style.backgroundColor =  hslColor; //"hsl(145,50%,45%)";
+         
+         
+         })
+         
+         function createRandHSL(){
+            
+            var color = "hsl("+[0,0,0].map(function(val, i){ 
+                if (i==0)
+                    return Math.round(100*Math.random()); 
+                else
+                    return Math.round(100*Math.random())+"%"; 
+            }).join(',')+")";    
+            box.style.backgroundColor =  color; 
+         
+            console.log("randHSL generated: "+ color);
+         }
+         var button = document.getElementById("noAccelButton");
+         button.onclick = createRandHSL;
+      </script>
+   </body>
+
+   <br/>
+   <br/>
+   <footer>
+      <div>Yuan (Will) Wen</div>
+      <a href = "README.md">ReadMe.txt</a>
+   </footer>
+</html>
+
